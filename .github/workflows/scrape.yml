@@ -23,8 +23,20 @@ jobs:
           pip install playwright requests
           playwright install chromium
 
+      - name: Restore seen.json from cache
+        uses: actions/cache@v3
+        with:
+          path: seen.json
+          key: seen-json-cache
+
       - name: Run scraper
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python scraper.py
+
+      - name: Save seen.json to cache
+        uses: actions/cache/save@v3
+        with:
+          path: seen.json
+          key: seen-json-cache
