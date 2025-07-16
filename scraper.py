@@ -99,7 +99,7 @@ def main():
         send_telegram_message(message)
         print(f"🚀 Sent alert: {title}")
 
-    save_seen(new_seen)
+    save_seen(seen.union(new_seen))
 
     if not new_listings:
         print("✅ No new listings found.")
