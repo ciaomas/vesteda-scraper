@@ -8,7 +8,7 @@ import time
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 SEEN_FILE = "seen.json"
-LISTING_URL = "https://www.vesteda.com/nl/woning-zoeken?placeType=1&sortType=0&radius=20&s=Amsterdam&sc=woning&latitude=52.36757278442383&longitude=4.904139041900635&filters=&priceFrom=500&priceTo=9999"
+LISTING_URL = "https://www.vesteda.com/nl/woning-zoeken?placeType=1&sortType=0&radius=20&s=Amsterdam&sc=woning&latitude=52.36757278442383&longitude=4.904139041900635&filters=&priceFrom=500&priceTo=3499"
 
 def send_telegram_message(message):
     url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
@@ -102,13 +102,16 @@ def main():
 
         browser.close()
 
+    # Send Telegram alerts
     for title, city, price, url in new_listings:
         message = f"🏠 <b>{title}</b>\n📍 {city}\n💶 {price}\n🔗 {url}"
         send_telegram_message(message)
         print(f"🚀 Sent alert: {title}")
 
+    # Only save seen.json if scraping succeeded
     save_seen(seen.union(new_seen))
 
+    # Final status message
     if not new_listings:
         print("✅ No new listings found.")
         send_telegram_message("🟢 Scraper is running. No new listings right now.")
