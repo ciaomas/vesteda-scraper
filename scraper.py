@@ -40,7 +40,15 @@ def main():
         browser = p.chromium.launch(headless=True)
         page = browser.new_page()
         print("🔎 Opening Vesteda listings page...")
-        page.goto(LISTING_URL, timeout=60000)
+
+        try:
+            page.goto(LISTING_URL, timeout=60000)
+        except Exception as e:
+            error_message = f"❌ <b>Scraper failed to open Vesteda page</b>\nError: {str(e)}"
+            print(error_message)
+            send_telegram_message(error_message)
+            browser.close()
+            return
 
         # Accept cookies
         try:
@@ -103,7 +111,7 @@ def main():
 
     if not new_listings:
         print("✅ No new listings found.")
-        send_telegram_message("ℹ️ <b>No new listings found.</b>")
+        send_telegram_message("🟢 Scraper is running. No new listings right now.")
     else:
         print(f"✅ {len(new_listings)} new listings sent.")
 
