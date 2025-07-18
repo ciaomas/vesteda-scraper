@@ -114,7 +114,7 @@ def main():
     # Final status message
     if not new_listings:
         print("✅ No new listings found.")
-        send_telegram_message("🟢 Scraper is running. No new listings right now.")
+        send_telegram_message("🟢 Vesteda Scraper is running. No new listings right now.")
     else:
         print(f"✅ {len(new_listings)} new listings sent.")
 
